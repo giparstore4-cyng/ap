@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>TokoReal | Belanja Online Modern</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', 'Inter', 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #f4f6fa;
+            color: #1e2a3e;
+            padding: 20px;
+        }
+
+        /* Container utama */
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-radius: 28px;
+            padding: 16px 24px;
+            margin-bottom: 28px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.03), 0 2px 6px rgba(0,0,0,0.05);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            background: #2c7da0;
+            width: 42px;
+            height: 42px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            box-shadow: 0 4px 8px rgba(44,125,160,0.2);
+        }
+
+        .logo-text h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, #1e4668, #2c7da0);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .logo-text p {
+            font-size: 0.75rem;
+            color: #5c6f87;
+        }
+
+        .search-wrapper {
+            flex: 1;
+            max-width: 380px;
+            min-width: 200px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: #f0f2f5;
+            border-radius: 60px;
+            padding: 8px 18px;
+            gap: 8px;
+            transition: all 0.2s;
+            border: 1px solid #e2e8f0;
+        }
+        .search-box:focus-within {
+            background: white;
+            border-color: #2c7da0;
+            box-shadow: 0 0 0 3px rgba(44,125,160,0.2);
+        }
+        .search-box input {
+            background: transparent;
+            border: none;
+            width: 100%;
+            font-size: 0.9rem;
+            padding: 6px 0;
+            outline: none;
+            font-weight: 500;
+        }
+        .search-box span {
+            color: #7e8c9e;
+        }
+
+        .cart-badge-header {
+            background: #f1f5f9;
+            border-radius: 50px;
+            padding: 8px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #e2edf2;
+        }
+        .cart-badge-header:hover {
+            background: #e6edf4;
+        }
+        .cart-icon {
+            font-size: 22px;
+            position: relative;
+        }
+        .cart-count {
+            background: #2c7da0;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: bold;
+            border-radius: 30px;
+            padding: 2px 8px;
+            margin-left: 4px;
+        }
+        .cart-total-preview {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #1e4668;
+        }
+
+        /* Layout 2 kolom: produk & cart sidebar */
+        .shop-layout {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 28px;
+        }
+
+        /* Section Produk */
+        .products-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        /* Card Produk */
+        .product-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 30px -12px rgba(0,0,0,0.15);
+            border-color: rgba(44,125,160,0.3);
+        }
+        .product-img {
+            height: 160px;
+            background: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        .product-card:hover .product-img img {
+            transform: scale(1.03);
+        }
+        .product-info {
+            padding: 16px 16px 20px;
+        }
+        .product-name {
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 6px;
+            color: #0f2b3d;
+        }
+        .product-price {
+            font-weight: 700;
+            color: #2c7da0;
+            font-size: 1.2rem;
+            margin: 10px 0 12px;
+        }
+        .add-to-cart-btn {
+            width: 100%;
+            background: #1e4668;
+            border: none;
+            padding: 10px 0;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.85rem;
+        }
+        .add-to-cart-btn:hover {
+            background: #2c7da0;
+            transform: scale(0.98);
+        }
+
+        /* Sidebar Keranjang */
+        .cart-sidebar {
+            background: white;
+            border-radius: 28px;
+            padding: 20px 18px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #eef2f8;
+        }
+        .cart-sidebar h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 2px solid #eef2f8;
+            padding-bottom: 12px;
+            margin-bottom: 18px;
+        }
+        .cart-items-list {
+            flex: 1;
+            overflow-y: auto;
+            max-height: 50vh;
+            padding-right: 4px;
+            margin-bottom: 20px;
+        }
+        .cart-item {
+            display: flex;
+            gap: 12px;
+            background: #fafcff;
+            border-radius: 20px;
+            padding: 10px;
+            margin-bottom: 12px;
+            border: 1px solid #eef2f8;
+            transition: 0.1s;
+        }
+        .cart-item-img {
+            width: 55px;
+            height: 55px;
+            border-radius: 16px;
+            background: #eef2fa;
+            object-fit: cover;
+        }
+        .cart-item-details {
+            flex: 1;
+        }
+        .cart-item-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        .cart-item-price {
+            font-size: 0.75rem;
+            color: #2c7da0;
+            font-weight: 500;
+        }
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 6px;
+        }
+        .cart-qty-btn {
+            background: #edf2f7;
+            border: none;
+            width: 26px;
+            height: 26px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.1s;
+        }
+        .cart-qty-btn:hover {
+            background: #cbdde9;
+        }
+        .cart-item-qty {
+            font-weight: 600;
+            font-size: 0.8rem;
+            min-width: 20px;
+            text-align: center;
+        }
+        .remove-item {
+            background: none;
+            border: none;
+            color: #b91c1c;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-left: 4px;
+            opacity: 0.7;
+        }
+        .cart-summary {
+            border-top: 2px dashed #e2edf2;
+            padding-top: 16px;
+            margin-top: 8px;
+        }
+        .cart-total-row {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin: 12px 0;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .btn-clear, .btn-checkout {
+            flex: 1;
+            padding: 12px 0;
+            border-radius: 44px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-clear {
+            background: #f1f3f7;
+            color: #4a5b6e;
+        }
+        .btn-checkout {
+            background: #1e4668;
+            color: white;
+        }
+        .btn-checkout:hover {
+            background: #0f3a57;
+        }
+        .empty-cart-message {
+            text-align: center;
+            color: #8a99aa;
+            padding: 32px 0;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 860px) {
+            .shop-layout {
+                grid-template-columns: 1fr;
+                gap: 28px;
+            }
+            .cart-sidebar {
+                position: static;
+                max-height: unset;
+            }
+            body {
+                padding: 16px;
+            }
+        }
+        @media (max-width: 550px) {
+            .products-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 14px;
+            }
+            .product-info {
+                padding: 10px;
+            }
+            .product-name {
+                font-size: 0.85rem;
+            }
+        }
+        .no-products {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 48px;
+            background: white;
+            border-radius: 32px;
+            color: #64748b;
+        }
+        footer {
+            margin-top: 48px;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.75rem;
+            color: #6c7e97;
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <!-- Header dengan search & preview -->
+    <div class="header">
+        <div class="logo-area">
+            <div class="logo-icon">🛒</div>
+            <div class="logo-text">
+                <h1>TokoReal</h1>
+                <p>belanja terpercaya & modern</p>
+            </div>
+        </div>
+        <div class="search-wrapper">
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" id="searchInput" placeholder="Cari produk... baju, sepatu, headphone">
+            </div>
+        </div>
+        <div class="cart-badge-header" id="cartPreviewBtn">
+            <div class="cart-icon">🛍️</div>
+            <span class="cart-count" id="cartCountBadge">0</span>
+            <span class="cart-total-preview" id="cartTotalPreview">Rp0</span>
+        </div>
+    </div>
+
+    <!-- Layout utama -->
+    <div class="shop-layout">
+        <!-- Bagian daftar produk -->
+        <div class="products-section">
+            <h2>✨ Semua Produk</h2>
+            <div class="products-grid" id="productsContainer">
+                <!-- product cards akan di render JS -->
+            </div>
+        </div>
+
+        <!-- Sidebar keranjang belanja -->
+        <div class="cart-sidebar" id="cartSidebar">
+            <h3>🛒 Keranjang <span style="font-size:0.8rem;">🛍️</span></h3>
+            <div class="cart-items-list" id="cartItemsList">
+                <div class="empty-cart-message">Keranjang masih kosong</div>
+            </div>
+            <div class="cart-summary">
+                <div class="cart-total-row">
+                    <span>Total Belanja</span>
+                    <span id="cartTotalAmount">Rp0</span>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn-clear" id="clearCartBtn">🗑️ Kosongkan</button>
+                    <button class="btn-checkout" id="checkoutBtn">✅ Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        © 2025 TokoReal | Demo e-commerce fungsional | Simpan otomatis di browser
+    </footer>
+</div>
+
+<script>
+    // ---------- MASTER PRODUK (data real) ----------
+    const PRODUCTS = [
+        { id: "p1", name: "Kaos Polos Premium", price: 149000, imageUrl: "https://picsum.photos/id/20/300/200", category: "baju" },
+        { id: "p2", name: "Sepatu Sport Running", price: 359000, imageUrl: "https://picsum.photos/id/96/300/200", category: "sepatu" },
+        { id: "p3", name: "Tas Ransel Urban", price: 279000, imageUrl: "https://picsum.photos/id/133/300/200", category: "tas" },
+        { id: "p4", name: "Jam Tangan Casual", price: 525000, imageUrl: "https://picsum.photos/id/82/300/200", category: "jam" },
+        { id: "p5", name: "Headphone Bluetooth", price: 445000, imageUrl: "https://picsum.photos/id/1/300/200", category: "elektronik" },
+        { id: "p6", name: "Kacamata Hitam Retro", price: 219000, imageUrl: "https://picsum.photos/id/26/300/200", category: "aksesoris" }
+    ];
+
+    // State keranjang: array of { productId, name, price, imageUrl, quantity }
+    let cart = [];
+
+    // State filter/search
+    let searchKeyword = "";
+
+    // DOM elements
+    const productsContainer = document.getElementById("productsContainer");
+    const cartItemsList = document.getElementById("cartItemsList");
+    const cartCountBadge = document.getElementById("cartCountBadge");
+    const cartTotalPreview = document.getElementById("cartTotalPreview");
+    const cartTotalAmountSpan = document.getElementById("cartTotalAmount");
+    const searchInput = document.getElementById("searchInput");
+
+    // Helper: format Rupiah
+    function formatRupiah(amount) {
+        return new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(amount);
+    }
+
+    // Simpan keranjang ke localStorage
+    function saveCartToLocal() {
+        localStorage.setItem("tokoRealCart", JSON.stringify(cart));
+    }
+
+    // Muat keranjang dari localStorage
+    function loadCartFromLocal() {
+        const saved = localStorage.getItem("tokoRealCart");
+        if (saved) {
+            try {
+                cart = JSON.parse(saved);
+                // validasi minimal structure
+                if (!Array.isArray(cart)) cart = [];
+            } catch(e) { cart = []; }
+        } else {
+            cart = [];
+        }
+    }
+
+    // Update semua UI yang berkaitan dengan keranjang: badge, total preview, sidebar cart, total amount
+    function updateAllCartUI() {
+        // total quantity dan total amount
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        
+        // badge header & preview total
+        cartCountBadge.innerText = totalItems;
+        cartTotalPreview.innerText = formatRupiah(totalAmount);
+        cartTotalAmountSpan.innerText = formatRupiah(totalAmount);
+        
+        // render cart items di sidebar
+        renderCartItems();
+        
+        // simpan perubahan ke local
+        saveCartToLocal();
+    }
+
+    // Render item keranjang di sidebar
+    function renderCartItems() {
+        if (!cartItemsList) return;
+        if (cart.length === 0) {
+            cartItemsList.innerHTML = `<div class="empty-cart-message">🛍️ Keranjang masih kosong<br>Tambahkan produk yuk!</div>`;
+            return;
+        }
+        
+        let html = "";
+        cart.forEach(item => {
+            const itemTotal = item.price * item.quantity;
+            html += `
+                <div class="cart-item" data-product-id="${item.productId}">
+                    <img class="cart-item-img" src="${item.imageUrl}" alt="${item.name}" loading="lazy" onerror="this.src='https://picsum.photos/id/13/55/55'">
+                    <div class="cart-item-details">
+                        <div class="cart-item-name">${escapeHtml(item.name)}</div>
+                        <div class="cart-item-price">${formatRupiah(item.price)}</div>
+                        <div class="cart-item-controls">
+                            <button class="cart-qty-btn decrement-qty" data-id="${item.productId}">−</button>
+                            <span class="cart-item-qty">${item.quantity}</span>
+                            <button class="cart-qty-btn increment-qty" data-id="${item.productId}">+</button>
+                            <button class="remove-item" data-id="${item.productId}">🗑️</button>
+                        </div>
+                    </div>
+                    <div style="font-weight:600; font-size:0.8rem;">${formatRupiah(itemTotal)}</div>
+                </div>
+            `;
+        });
+        cartItemsList.innerHTML = html;
+    }
+
+    // Fungsi untuk menambah ke keranjang (add 1 atau quantity tertentu)
+    function addToCart(productId, qtyToAdd = 1) {
+        const product = PRODUCTS.find(p => p.id === productId);
+        if (!product) return;
+        
+        const existingIndex = cart.findIndex(item => item.productId === productId);
+        if (existingIndex !== -1) {
+            cart[existingIndex].quantity += qtyToAdd;
+            if (cart[existingIndex].quantity < 1) cart[existingIndex].quantity = 1;
+        } else {
+            cart.push({
+                productId: product.id,
+                name: product.name,
+                price: product.price,
+                imageUrl: product.imageUrl,
+                quantity: Math.max(1, qtyToAdd)
+            });
+        }
+        updateAllCartUI();
+    }
+
+    // update quantity item tertentu (delta = +1 / -1)
+    function updateCartItemQuantity(productId, delta) {
+        const index = cart.findIndex(item => item.productId === productId);
+        if (index === -1) return;
+        const newQty = cart[index].quantity + delta;
+        if (newQty <= 0) {
+            // hapus item
+            cart.splice(index, 1);
+        } else {
+            cart[index].quantity = newQty;
+        }
+        updateAllCartUI();
+    }
+    
+    // hapus item langsung
+    function removeCartItem(productId) {
+        cart = cart.filter(item => item.productId !== productId);
+        updateAllCartUI();
+    }
+    
+    // kosongkan keranjang
+    function clearCart() {
+        if (cart.length === 0) return;
+        if (confirm("Kosongkan semua item di keranjang?")) {
+            cart = [];
+            updateAllCartUI();
+        }
+    }
+    
+    // proses checkout
+    function checkoutProcess() {
+        if (cart.length === 0) {
+            alert("❌ Keranjang masih kosong, tambahkan produk dulu ya!");
+            return;
+        }
+        const total = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+        const itemNames = cart.map(i => `${i.name} (${i.quantity}x)`).join(", ");
+        alert(`🛍️ TERIMA KASIH TELAH BERBELANJA!\n\nPesanan Anda:\n${itemNames}\n\nTotal: ${formatRupiah(total)}\n\nPesanan akan segera diproses. 📦`);
+        // kosongkan keranjang setelah checkout sukses
+        cart = [];
+        updateAllCartUI();
+    }
+
+    // Render daftar produk dengan filter search
+    function renderProducts() {
+        let filteredProducts = PRODUCTS;
+        if (searchKeyword.trim() !== "") {
+            const kw = searchKeyword.toLowerCase().trim();
+            filteredProducts = PRODUCTS.filter(product => 
+                product.name.toLowerCase().includes(kw) || 
+                product.category.toLowerCase().includes(kw)
+            );
+        }
+        
+        if (filteredProducts.length === 0) {
+            productsContainer.innerHTML = `<div class="no-products">😞 Produk tidak ditemukan untuk kata kunci "${escapeHtml(searchKeyword)}"</div>`;
+            return;
+        }
+        
+        let productsHtml = "";
+        filteredProducts.forEach(product => {
+            productsHtml += `
+                <div class="product-card" data-id="${product.id}">
+                    <div class="product-img">
+                        <img src="${product.imageUrl}" alt="${product.name}" loading="lazy" onerror="this.src='https://picsum.photos/id/13/300/200'">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${escapeHtml(product.name)}</div>
+                        <div class="product-price">${formatRupiah(product.price)}</div>
+                        <button class="add-to-cart-btn" data-id="${product.id}">➕ Tambah ke Keranjang</button>
+                    </div>
+                </div>
+            `;
+        });
+        productsContainer.innerHTML = productsHtml;
+    }
+    
+    // Event delegation untuk tombol +/ - / remove di keranjang
+    function setupCartEventDelegation() {
+        // Event listener untuk tombol di dalam container cartItemsList (delegation)
+        cartItemsList.addEventListener("click", (e) => {
+            const target = e.target;
+            const productId = target.getAttribute("data-id");
+            if (!productId) return;
+            
+            if (target.classList.contains("increment-qty")) {
+                updateCartItemQuantity(productId, 1);
+            } 
+            else if (target.classList.contains("decrement-qty")) {
+                updateCartItemQuantity(productId, -1);
+            }
+            else if (target.classList.contains("remove-item")) {
+                removeCartItem(productId);
+            }
+        });
+    }
+    
+    // Event delegation untuk tombol add to cart (produk)
+    function setupProductAddEvent() {
+        productsContainer.addEventListener("click", (e) => {
+            const btn = e.target.closest(".add-to-cart-btn");
+            if (btn && btn.dataset.id) {
+                addToCart(btn.dataset.id, 1);
+                // efek notifikasi kecil
+                const originalText = btn.innerText;
+                btn.innerText = "✓ Ditambahkan!";
+                setTimeout(() => {
+                    if (btn) btn.innerText = originalText;
+                }, 800);
+            }
+        });
+    }
+    
+    // Fungsi untuk filter ketika search berubah
+    function handleSearch() {
+        searchKeyword = searchInput.value;
+        renderProducts();
+    }
+    
+    // Utility: escape HTML untuk mencegah XSS
+    function escapeHtml(str) {
+        if (!str) return "";
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+            return c;
+        });
+    }
+    
+    // inisialisasi dan load awal
+    function init() {
+        loadCartFromLocal();
+        updateAllCartUI();
+        renderProducts();
+        setupProductAddEvent();
+        setupCartEventDelegation();
+        
+        // event listener search dengan debounce sederhana
+        let debounceTimer;
+        searchInput.addEventListener("input", () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                handleSearch();
+            }, 300);
+        });
+        
+        // tombol clear cart dan checkout
+        const clearBtn = document.getElementById("clearCartBtn");
+        const checkoutBtn = document.getElementById("checkoutBtn");
+        if (clearBtn) clearBtn.addEventListener("click", clearCart);
+        if (checkoutBtn) checkoutBtn.addEventListener("click", checkoutProcess);
+        
+        // Preview cart klik scroll ke sidebar (optional)
+        const previewBtn = document.getElementById("cartPreviewBtn");
+        if (previewBtn) {
+            previewBtn.addEventListener("click", () => {
+                document.getElementById("cartSidebar").scrollIntoView({ behavior: "smooth", block: "start" });
+            });
+        }
+    }
+    
+    // start
+    init();
+</script>
+</body>
+</html>
